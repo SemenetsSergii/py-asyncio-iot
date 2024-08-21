@@ -1,5 +1,7 @@
+import asyncio
 import random
 import string
+
 from typing import Protocol
 
 from .message import Message, MessageType
@@ -14,8 +16,6 @@ def generate_id(length: int = 8) -> str:
 # like a duck, and quacks like a duck, it's a duck)
 class Device(Protocol):
     async def connect(self) -> None:
-        ...  # Ellipsis - similar to "pass",
-        # but sometimes has different meaning
 
     async def disconnect(self) -> None:
         ...
@@ -43,8 +43,8 @@ class IOTService:
 
     async def run_program(self, program: list[Message]) -> None:
         print("=====RUNNING PROGRAM======")
-        for msg in program:
-            await self.send_msg(msg)
+        tasks = [self.send_msg(msg) for msg in program]
+        await asyncio.gather(*tasks)
         print("=====END OF PROGRAM======")
 
     async def send_msg(self, msg: Message) -> None:
