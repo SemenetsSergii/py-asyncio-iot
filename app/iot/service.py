@@ -16,6 +16,7 @@ def generate_id(length: int = 8) -> str:
 # like a duck, and quacks like a duck, it's a duck)
 class Device(Protocol):
     async def connect(self) -> None:
+        ...
 
     async def disconnect(self) -> None:
         ...
